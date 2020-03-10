@@ -1,26 +1,54 @@
 import React from 'react'
-import { Link } from "react-router-dom";
 import { useQuery } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
+import { Link } from "react-router-dom";
 
-export default function () {
+const INDEX = gql`
+{
+  groups{
+    id
+    name
+    humanStatus
+    customerCompany{
+      id
+      name
+    }
+  }
+}
+`;
+
+export default function GroupIndex() {
+  const { loading, error, data } = useQuery(INDEX);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error :(</p>;
+
+  const rows = data.groups.map(group =>
+    <tr key={group.id}>
+      <td>{group.id}</td>
+      <td>{group.name}</td>
+      <td>{group.customerCompany?.name}</td>
+      <td>Учебный курс и расписание</td>
+      <td>Студенты</td>
+      <td>{group.humanStatus}</td>
+    </tr>
+  )
+
   return (
     <div id="page-wrapper" className="gray-bg">
+
       <div className="row wrapper border-bottom white-bg page-heading">
         <div className="col-lg-10">
-          <h2>Новая группа</h2>
+          <h2>Учебные группы</h2>
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              <a href="/">Home</a>
+              <a href="index.html">Home</a>
             </li>
             <li className="breadcrumb-item">
               <a>Управление обучением</a>
             </li>
             <li className="breadcrumb-item active">
-              <Link to="/groups">Учебные группы</Link>
-            </li>
-            <li className="breadcrumb-item active">
-              <strong>Новая группа</strong>
+              <strong>Учебные группы</strong>
             </li>
           </ol>
         </div>
@@ -31,7 +59,12 @@ export default function () {
           <div className="col-lg-12">
             <div className="ibox ">
               <div className="ibox-title">
-                <h5>Учебные группы</h5>
+                <h5>
+                  Учебные группы&nbsp;
+                  <Link to="/groups/new" className="btn btn-primary">+</Link>
+
+
+                </h5>
               </div>
               <div className="ibox-content">
 
@@ -49,6 +82,7 @@ export default function () {
                     </tr>
                   </thead>
                   <tbody>
+                    {rows}
                   </tbody>
                 </table>
 
@@ -59,4 +93,6 @@ export default function () {
       </div>
     </div>
   )
+
+
 }

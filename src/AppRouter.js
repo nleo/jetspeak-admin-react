@@ -1,6 +1,7 @@
 import React from 'react';
-import GroupIndex from './components/groups/index'
-import GroupNew from './components/groups/new'
+import GroupIndex from './components/groups/IndexPage'
+import GroupNew from './components/groups/NewPage'
+import LoginPage from './features/Auth/LoginPage'
 import {
   BrowserRouter as Router,
   Switch,
@@ -16,7 +17,7 @@ export default function AppRouter() {
           <div className="sidebar-collapse">
             <ul className="nav metismenu" id="side-menu">
               <li>
-                <Link to="/about"><i className="fa fa-pie-chart"></i> <span className="nav-label">About</span></Link>
+                <Link to="/login"><i className="fa fa-pie-chart"></i> <span className="nav-label">Войти</span></Link>
               </li>
               <li>
                 <Link to="/users"><i className="fa fa-pie-chart"></i> <span className="nav-label">Users</span>  </Link>
@@ -28,8 +29,8 @@ export default function AppRouter() {
           </div>
         </nav>
         <Switch>
-          <Route path="/about">
-            <About />
+          <Route path="/login">
+            <LoginPage />
           </Route>
           <Route path="/groups/new">
             <GroupNew />
