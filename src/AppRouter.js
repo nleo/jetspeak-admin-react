@@ -38,30 +38,8 @@ export default function AppRouter() {
           <Route path="/groups">
             <GroupIndex />
           </Route>
-          <Route path="/users">
-            <Users />
-          </Route>
-          <Route path="/">
-            <Home />
-          </Route>
         </Switch>
       </div>
     </Router >
   )
-}
-
-function Home() {
-  return <h2>Home</h2>;
-}
-
-function Groups() {
-  return <h2>Groups</h2>;
-}
-
-function About() {
-  return <h2>About</h2>;
-}
-
-function Users() {
-  return <h2>Users</h2>;
 }
