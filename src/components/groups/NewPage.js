@@ -37,24 +37,35 @@ const query_gql = gql`
 
 export default function () {
 
-  const onSubmit = data => { console.log(data) }
+  const onSubmit = data => {
+    const formData = { ...data, ...formState };
+    console.log(formData)
+  }
 
-  const [state, setState] = useState({ customerCompany: 0 });
+  const [customerCompanyId, setCustomerCompanyId] = useState(0);
+
   const customerCompanySelected = (optionSelected) => {
-    setState({ customerCompany: optionSelected.value })
+    setCustomerCompanyId(optionSelected.value)
+    handleSelectChange(optionSelected, 'customerCompanyId')
   }
 
   const { control, setValue, register, handleSubmit, watch, errors } = useForm()
-  const [values, setReactSelectValue] = useState({ selectedOption: [] });
+  const [formState, setFormState] = useState({ customerCompanyId: 0 });
 
-  const handleMultiChange = selectedOption => {
-    setValue("reactSelect", selectedOption);
-    setReactSelectValue({ selectedOption });
+  const handleSelectChange = (selectedOption, name) => {
+    console.log('selectedOption', selectedOption)
+    setValue(name, selectedOption);
+    let state = formState
+    if (name === 'coordinator_ids') {
+      state[name] = selectedOption.map(el => el.value)
+      setFormState(state);
+     }
+    else {
+      state[name] = selectedOption.value
+      setFormState(state);
+    }
+    console.log(state)
   }
-
-  React.useEffect(() => {
-    register({ name: "reactSelect" }); // custom register react-select
-  }, [register])
 
   const { loading, error, data } = useQuery(query_gql);
   if (loading) return <p>Loading...</p>;
@@ -85,65 +96,32 @@ export default function () {
                     <input name="nameEn" type="text" className="form-control" ref={register} />
                   </FormGroup>
 
-                  <div className="form-group  row">
-                    <label className="col-sm-2 col-form-label">Дистрибьютор</label>
-                    <div className="col-sm-10">
-                      {/* <Controller
-                        as={Select}
-                        name="distributor_id"
-                        control={control}
-                        onChange={([selected]) => {
-                          return { value: selected };
-                        }}
-                        // defaultValue={distributors_options[2]}
-                        defaultValue={{}}
-                        options={distributors_options}
-                      /> */}
-                      <Select onChange={handleMultiChange} options={distributors_options} name="distributor_id" defaultValue={distributors_options[2]} />
-                    </div>
-                  </div>
-                  <div className="hr-line-dashed"></div>
+                  <FormGroup label="Дистрибьютор">
+                    <Select onChange={e => handleSelectChange(e, 'distributor_id')}
+                      options={distributors_options}
+                      name="distributor_id"
+                      defaultValue={distributors_options[2]} />
+                  </FormGroup>
 
-                  <div className="form-group  row">
-                    <label className="col-sm-2 col-form-label">Учреждение</label>
-                    <div className="col-sm-10">
-                      <Select options={institutions_options} name="institution_id" defaultValue={institutions_options[4]} />
-                    </div>
-                  </div>
-                  <div className="hr-line-dashed"></div>
+                  <FormGroup label="Учреждение">
+                    <Select onChange={e => handleSelectChange(e, 'institution_id')} options={institutions_options} name="institution_id" defaultValue={institutions_options[4]} />
+                  </FormGroup>
 
-                  <div className="form-group  row">
-                    <label className="col-sm-2 col-form-label">Компания-заказчик</label>
-                    <div className="col-sm-10">
-                      {/* <Select options={customer_companies_options} name="customer_company_id" onChange={customerCompanySelected} /> */}
-                      <Select options={customer_companies_options} name="customer_company_id" />
-                    </div>
-                  </div>
-                  <div className="hr-line-dashed"></div>
+                  <FormGroup label="Компания-заказчик">
+                    <Select onChange={customerCompanySelected} options={customer_companies_options} name="customer_company_id" />
+                  </FormGroup>
 
-                  <div className="form-group  row">
-                    <label className="col-sm-2 col-form-label">Изучаемый язык</label>
-                    <div className="col-sm-10">
-                      <Select options={languages_options} name="language_id" defaultValue={languages_options[0]} />
-                    </div>
-                  </div>
-                  <div className="hr-line-dashed"></div>
+                  <FormGroup label="Изучаемый язык">
+                    <Select onChange={e => handleSelectChange(e, 'language_id')} options={languages_options} name="language_id" defaultValue={languages_options[0]} />
+                  </FormGroup>
 
-                  <div className="form-group  row">
-                    <label className="col-sm-2 col-form-label">Координаторы</label>
-                    <div className="col-sm-10">
-                      <Select options={coordinators_options} name="coordinator_ids" isMulti />
-                    </div>
-                  </div>
-                  <div className="hr-line-dashed"></div>
+                  <FormGroup label="Координаторы">
+                    <Select onChange={e => handleSelectChange(e, 'coordinator_ids')} options={coordinators_options} name="coordinator_ids" isMulti />
+                  </FormGroup>
 
-                  <div className="form-group  row">
-                    <label className="col-sm-2 col-form-label">HR (Куратор от Компании-заказчика)</label>
-                    <div className="col-sm-10">
-                      {/* <CuratorSelect companyId={state.customerCompany} /> */}
-                    </div>
-                  </div>
-                  <div className="hr-line-dashed"></div>
+                  <FormGroup label="HR (Куратор от Компании-заказчика)">
+                    <CuratorSelect companyId={customerCompanyId} />
+                  </FormGroup>
 
                   <div className="form-group row justify-content-end">
                     <div className="col-sm-2">
@@ -152,10 +130,6 @@ export default function () {
                   </div>
 
                 </form>
-
-
-
-
 
               </div>
             </div>
