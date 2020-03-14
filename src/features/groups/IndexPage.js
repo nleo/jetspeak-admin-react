@@ -11,7 +11,7 @@ import {
 } from "react-router-dom";
 import IndexTable from './components/IndexTable'
 import GroupNew from './NewPage'
-import ShowGroup from './components/ShowGroup'
+import ShowGroup from './pages/show/ShowGroup'
 
 export default function GroupIndex() {
   let match = useRouteMatch();
