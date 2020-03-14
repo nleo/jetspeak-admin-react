@@ -1,6 +1,5 @@
 import React from 'react';
-import GroupIndex from './components/groups/IndexPage'
-import GroupNew from './components/groups/NewPage'
+import GroupIndex from './features/groups/IndexPage'
 import LoginPage from './features/Auth/LoginPage'
 import {
   BrowserRouter as Router,
@@ -31,9 +30,6 @@ export default function AppRouter() {
         <Switch>
           <Route path="/login">
             <LoginPage />
-          </Route>
-          <Route path="/groups/new">
-            <GroupNew />
           </Route>
           <Route path="/groups">
             <GroupIndex />

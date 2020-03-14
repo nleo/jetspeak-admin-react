@@ -11,8 +11,8 @@ import {
 } from "react-router-dom";
 
 const index_gql = gql`
-{
-  groups{
+query Group($id: ID!){
+  groups(id: $id){
     id
     name
     humanStatus
@@ -26,6 +26,13 @@ const index_gql = gql`
 
 export default function () {
   let { id } = useParams();
+
+  const { loading, error, data } = useQuery(index_gql, { variables: { id } });
+  // let match = useRouteMatch();
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error :(</p>;
+
+  const group = data.groups[0]
 
   return (
 
@@ -42,7 +49,10 @@ export default function () {
               <a>Управление обучением</a>
             </li>
             <li className="breadcrumb-item active">
-              <strong>Учебные группы</strong>
+              <Link to="/groups">Учебные группы</Link>
+            </li>
+            <li className="breadcrumb-item active">
+              <strong>{group.name}</strong>
             </li>
           </ol>
         </div>
@@ -53,11 +63,10 @@ export default function () {
           <div className="col-lg-12">
             <div className="ibox ">
               <div className="ibox-title">
-                <h5> Группа: </h5>
+                <h5> {group.name}</h5>
               </div>
               <div className="ibox-content">
                 Группа: {id}
-
               </div>
             </div>
           </div>

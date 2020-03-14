@@ -10,6 +10,7 @@ import {
   useParams
 } from "react-router-dom";
 import IndexTable from './components/IndexTable'
+import GroupNew from './NewPage'
 import ShowGroup from './components/ShowGroup'
 
 export default function GroupIndex() {
@@ -17,6 +18,9 @@ export default function GroupIndex() {
 
   return (
     <Switch>
+      <Route path={`${match.path}/new`}>
+        <GroupNew />
+      </Route>
       <Route path={`${match.path}/:id`}>
         <ShowGroup />
       </Route>

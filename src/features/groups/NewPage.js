@@ -5,7 +5,7 @@ import { gql } from 'apollo-boost';
 import Select from 'react-select'
 import Header from './new/header-breadcrumbs'
 import CuratorSelect from './CuratorSelect'
-import FormGroup from '../common/forms/FormGroup'
+import FormGroup from '../../components/common/forms/FormGroup'
 
 // import { useForm } from 'react-hook-form'
 
