@@ -61,18 +61,13 @@ export default function () {
   const { control, setValue, register, handleSubmit, watch, errors } = useForm()
   const [formState, setFormState] = useState({ customerCompanyId: 0 });
 
-  const handleSelectChange = (selectedOption, name) => {
+  const handleSelectChange = (selectedOption, name, isMulti = false) => {
     console.log('selectedOption', selectedOption)
     setValue(name, selectedOption);
     let state = formState
-    if (name === 'coordinatorIds') {
-      state[name] = selectedOption.map(el => el.value)
-      setFormState(state);
-     }
-    else {
-      state[name] = selectedOption.value
-      setFormState(state);
-    }
+    if (isMulti) state[name] = selectedOption.map(el => el.value)
+    else state[name] = selectedOption.value
+    setFormState(state);
     console.log(state)
   }
 
@@ -106,23 +101,23 @@ export default function () {
                   </FormGroup>
 
                   <FormGroup label="Дистрибьютор">
-                    <Select onChange={e => handleSelectChange(e, 'distributorId')} options={distributors_options} name="distributorId" />
+                    <Select onChange={e => handleSelectChange(e, 'distributorId')} options={distributors_options} />
                   </FormGroup>
 
                   <FormGroup label="Учреждение">
-                    <Select onChange={e => handleSelectChange(e, 'institutionId')} options={institutions_options} name="institutionId" />
+                    <Select onChange={e => handleSelectChange(e, 'institutionId')} options={institutions_options} />
                   </FormGroup>
 
                   <FormGroup label="Компания-заказчик">
-                    <Select onChange={customerCompanySelected} options={customer_companies_options} name="customerCompanyId" />
+                    <Select onChange={customerCompanySelected} options={customer_companies_options} />
                   </FormGroup>
 
                   <FormGroup label="Изучаемый язык">
-                    <Select onChange={e => handleSelectChange(e, 'languageId')} options={languages_options} name="languageId" />
+                    <Select onChange={e => handleSelectChange(e, 'languageId')} options={languages_options} />
                   </FormGroup>
 
                   <FormGroup label="Координаторы">
-                    <Select onChange={e => handleSelectChange(e, 'coordinatorIds')} options={coordinators_options} name="coordinatorIds" isMulti />
+                    <Select onChange={e => handleSelectChange(e, 'coordinatorIds', true)} options={coordinators_options} isMulti />
                   </FormGroup>
 
                   <FormGroup label="HR (Куратор от Компании-заказчика)">
