@@ -12,6 +12,8 @@ query Curators($companyId: ID!){
 }`
 
 export default function (props) {
+  // const [state, setState] = useState(props.companyId);
+
   let curators_options = []
   if (props.companyId > 0) {
     const { loading, error, data } = useQuery(curators_gql, {

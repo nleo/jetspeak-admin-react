@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 // import { Link } from "react-router-dom";
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
 import Select from 'react-select'
 import Header from './new/header-breadcrumbs'
@@ -35,10 +35,19 @@ const query_gql = gql`
   }
 }`
 
+const create_group_gql = gql`
+mutation createGroup($group: CreateGroupInput!){
+  createGroup(input: $group){
+    status
+  }
+}`
+
 export default function () {
+  const [createGroup, { createGroupData }] = useMutation(create_group_gql);
 
   const onSubmit = data => {
     const formData = { ...data, ...formState };
+    createGroup({ variables: { group: { params: formData } } })
     console.log(formData)
   }
 
@@ -56,7 +65,7 @@ export default function () {
     console.log('selectedOption', selectedOption)
     setValue(name, selectedOption);
     let state = formState
-    if (name === 'coordinator_ids') {
+    if (name === 'coordinatorIds') {
       state[name] = selectedOption.map(el => el.value)
       setFormState(state);
      }
@@ -97,26 +106,23 @@ export default function () {
                   </FormGroup>
 
                   <FormGroup label="Дистрибьютор">
-                    <Select onChange={e => handleSelectChange(e, 'distributor_id')}
-                      options={distributors_options}
-                      name="distributor_id"
-                      defaultValue={distributors_options[2]} />
+                    <Select onChange={e => handleSelectChange(e, 'distributorId')} options={distributors_options} name="distributorId" />
                   </FormGroup>
 
                   <FormGroup label="Учреждение">
-                    <Select onChange={e => handleSelectChange(e, 'institution_id')} options={institutions_options} name="institution_id" defaultValue={institutions_options[4]} />
+                    <Select onChange={e => handleSelectChange(e, 'institutionId')} options={institutions_options} name="institutionId" />
                   </FormGroup>
 
                   <FormGroup label="Компания-заказчик">
-                    <Select onChange={customerCompanySelected} options={customer_companies_options} name="customer_company_id" />
+                    <Select onChange={customerCompanySelected} options={customer_companies_options} name="customerCompanyId" />
                   </FormGroup>
 
                   <FormGroup label="Изучаемый язык">
-                    <Select onChange={e => handleSelectChange(e, 'language_id')} options={languages_options} name="language_id" defaultValue={languages_options[0]} />
+                    <Select onChange={e => handleSelectChange(e, 'languageId')} options={languages_options} name="languageId" />
                   </FormGroup>
 
                   <FormGroup label="Координаторы">
-                    <Select onChange={e => handleSelectChange(e, 'coordinator_ids')} options={coordinators_options} name="coordinator_ids" isMulti />
+                    <Select onChange={e => handleSelectChange(e, 'coordinatorIds')} options={coordinators_options} name="coordinatorIds" isMulti />
                   </FormGroup>
 
                   <FormGroup label="HR (Куратор от Компании-заказчика)">
