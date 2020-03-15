@@ -36,6 +36,7 @@ export default function () {
   // let match = useRouteMatch();
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
+  let match = useRouteMatch();
 
   const group = data.groups[0]
   console.log(group)
@@ -48,7 +49,7 @@ export default function () {
         <IBox title={group.name}>
           <GroupInfo group={group} />
         </IBox>
-        <IBox title="Занятия">
+        <IBox title={<span>Занятия <Link to={`/groups/${group.id}/add-class`} className="btn btn-primary">+</Link></span>}>
           <GroupInfo group={group} />
         </IBox>
         <IBox title="Студенты">

@@ -74,8 +74,6 @@ export default function () {
                 <h5>
                   Учебные группы&nbsp;
                   <Link to="/groups/new" className="btn btn-primary">+</Link>
-
-
                 </h5>
               </div>
               <div className="ibox-content">
