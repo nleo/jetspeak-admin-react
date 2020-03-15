@@ -25,6 +25,9 @@ export default function GroupIndex() {
       <Route path={`${match.path}/:id/add-class`}>
         <AddClass />
       </Route>
+      <Route path={`${match.path}/:id/add-students`}>
+        <AddClass />
+      </Route>
       <Route path={`${match.path}/:id`}>
         <ShowGroup />
       </Route>

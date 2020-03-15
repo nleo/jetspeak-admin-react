@@ -52,7 +52,7 @@ export default function () {
         <IBox title={<span>Занятия <Link to={`/groups/${group.id}/add-class`} className="btn btn-primary">+</Link></span>}>
           <GroupInfo group={group} />
         </IBox>
-        <IBox title="Студенты">
+        <IBox title={<span>Студенты <Link to={`/groups/${group.id}/add-students`} className="btn btn-primary">+</Link></span>}>
           <GroupInfo group={group} />
         </IBox>
       </WrapperBox>
