@@ -4,7 +4,7 @@ import { useQuery, useMutation } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
 import Select from 'react-select'
 import Header from './new/header-breadcrumbs'
-import CuratorSelect from './CuratorSelect'
+import CuratorSelect from './components/CuratorSelect'
 import FormGroup from '../../components/common/forms/FormGroup'
 
 // import { useForm } from 'react-hook-form'
