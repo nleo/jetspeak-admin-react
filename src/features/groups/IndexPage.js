@@ -13,6 +13,7 @@ import IndexTable from './components/IndexTable'
 import GroupNew from './NewPage'
 import ShowGroup from './pages/show/ShowGroup'
 import AddClass from './AddClass'
+import AddCourse from './AddCourse'
 
 export default function GroupIndex() {
   let match = useRouteMatch();
@@ -22,8 +23,8 @@ export default function GroupIndex() {
       <Route path={`${match.path}/new`}>
         <GroupNew />
       </Route>
-      <Route path={`${match.path}/:id/add-class`}>
-        <AddClass />
+      <Route path={`${match.path}/:id/add-course`}>
+        <AddCourse />
       </Route>
       <Route path={`${match.path}/:id/add-students`}>
         <AddClass />

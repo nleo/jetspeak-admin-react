@@ -108,65 +108,6 @@ export default function () {
             <FormGroup label="Продолжительность (месяцы)">
               <input name="duration" type="text" className="form-control" ref={register} />
             </FormGroup>
-
-            <div className="form-group row justify-content-end">
-              <div className="col-sm-2">
-                <input className="btn btn-primary btn-sm" type="submit" value="Создать" />
-              </div>
-            </div>
-
-          </form>
-        </IBox>
-        <IBox title="Занятия">
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <FormGroup label="Тип занятий">
-              <Select onChange={e => handleSelectChange(e, 'courseId')} options={distributors_options} />
-            </FormGroup>
-            <FormGroup label="Количество ак. часов по лицензии">
-              <input name="courseId" type="text" className="form-control" ref={register} />
-            </FormGroup>
-            <FormGroup label="Дата начала занятий">
-              <input name="courseId" type="text" className="form-control" ref={register} />
-            </FormGroup>
-
-            {/* <div className="hr-line-dashed" /> */}
-            <h4>Расписание:</h4>
-            <div className="hr-line-dashed" />
-            <FormGroup label="Дни недели">
-              <input name="courseId" type="text" className="form-control" ref={register} />
-            </FormGroup>
-
-            <FormGroup label="Время начала занятий">
-              <input name="courseId" type="text" className="form-control" ref={register} />
-            </FormGroup>
-
-            <FormGroup label="Длительность занятий, ак. часы">
-              <input name="courseId" type="text" className="form-control" ref={register} />
-            </FormGroup>
-
-            <FormGroup label="Преподаватель">
-              <input name="courseId" type="text" className="form-control" ref={register} />
-            </FormGroup>
-
-            <FormGroup label="Ссылка на комнату для вебинаров">
-              <input name="courseId" type="text" className="form-control" ref={register} />
-            </FormGroup>
-
-            <FormGroup label="Хост">
-              <input name="courseId" type="text" className="form-control" ref={register} />
-            </FormGroup>
-
-            <div className="form-group row justify-content-end">
-              <div className="col-sm-2">
-                <input className="btn btn-primary btn-sm" type="submit" value="Создать" />
-              </div>
-            </div>
-
-          </form>
-        </IBox>
-
-        <IBox title="Прохождения контента">
-          <form onSubmit={handleSubmit(onSubmit)}>
             <FormGroup label="Юнит старта">
               <Select onChange={e => handleSelectChange(e, 'courseId')} options={distributors_options} />
             </FormGroup>
@@ -182,6 +123,7 @@ export default function () {
 
           </form>
         </IBox>
+
       </WrapperBox>
 
     </div>
