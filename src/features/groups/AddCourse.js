@@ -30,20 +30,28 @@ const query_gql = gql`
   }
 }`
 
-const create_group_gql = gql`
-mutation createGroup($group: CreateGroupInput!){
-  createGroup(input: $group){
+const addCourseToGroupGQL = gql`
+mutation addCourseToGroup($data: AddCourseToGroupInput!){
+  addCourseToGroup(input: $data){
     status
   }
 }`
 
 export default function () {
-  const [createGroup, { createGroupData }] = useMutation(create_group_gql);
+  const [addCourseToGroup, result] = useMutation(addCourseToGroupGQL);
   let { id } = useParams();
 
+  console.log(result)
+
+  if(result.data?.addCourseToGroup?.status === 'ok')
+    return <Redirect to={`/groups/${id}`} />
+
+
   const onSubmit = data => {
-    const formData = { ...data, ...formState };
-    // createGroup({ variables: { group: { params: formData } } })
+    let formData = { ...data, ...formState, startDate: startDate }
+    formData.duration =  Number(formData.duration)
+    formData.classesPerUnit =  Number(formData.classesPerUnit)
+    addCourseToGroup({ variables: { data: formData } })
     console.log(formData)
   }
 
@@ -51,11 +59,11 @@ export default function () {
 
   const courseSelected = (optionSelected) => {
     setCourseId(optionSelected.value)
-    handleSelectChange(optionSelected, 'courseId')
+    handleSelectChange(optionSelected, 'learningCourseId')
   }
 
   const { control, setValue, register, handleSubmit, watch, errors } = useForm()
-  const [formState, setFormState] = useState({ customerCompanyId: 0 });
+  const [formState, setFormState] = useState({ learningGroupId: id  });
 
   const handleSelectChange = (selectedOption, name, isMulti = false) => {
     console.log('selectedOption', selectedOption)

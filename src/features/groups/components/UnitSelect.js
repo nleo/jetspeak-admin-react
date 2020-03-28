@@ -21,6 +21,6 @@ export default function (props) {
       units_options = data.units.map(item => ({value: item.id, label: item.name }) )}
   }
   return (
-    <Select options={units_options} name="unitId" onChange={e => props.handle(e, 'unitId')} />
+    <Select options={units_options} onChange={e => props.handle(e, 'startUnitId')} />
   )
 }
