@@ -12,7 +12,8 @@ import {
   Route,
   Link,
   useRouteMatch,
-  useParams
+  useParams,
+  Redirect
 } from "react-router-dom";
 import WrapperBox from '../../components/wrapper'
 import IBox from '../../components/ibox'
@@ -43,10 +44,6 @@ export default function () {
 
   console.log(result)
 
-  if(result.data?.addCourseToGroup?.status === 'ok')
-    return <Redirect to={`/groups/${id}`} />
-
-
   const onSubmit = data => {
     let formData = { ...data, ...formState, startDate: startDate }
     formData.duration =  Number(formData.duration)
@@ -75,12 +72,19 @@ export default function () {
     console.log(state)
   }
 
+
+
+
   const [startDate, setStartDate] = useState(new Date());
 
   const { loading, error, data } = useQuery(query_gql);
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
   const courses_options = data.courses.map(item => ({ value: item.id, label: item.name }))
+
+  if(result.data?.addCourseToGroup?.status === 'ok')
+    return <Redirect to={`/groups/${id}`} />
+
   return (
     <div id="page-wrapper" className="gray-bg">
       <Header />
