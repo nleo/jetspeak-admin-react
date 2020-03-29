@@ -24,6 +24,11 @@ query Group($id: ID!){
     humanStatus
     courseGroupScenarioRelations{
       id
+      groupClasses {
+        startAt
+        hours
+        type
+      }
       learningCourse {
         id
         name
@@ -58,7 +63,10 @@ export default function () {
   console.log(group)
 
   const courses = group.courseGroupScenarioRelations.map( cgsr =>
-    <IBox key={cgsr.id} title={cgsr.learningCourse.name}>
+    <IBox key={cgsr.id}
+          title={<span>{cgsr.learningCourse.name}
+            <Link to={`/groups/${group.id}/courses/${cgsr.id}/add-class`} className="btn btn-primary">+</Link></span>}
+      >
       <CgsrInfo cgsr={cgsr} />
     </IBox>
   )

@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { useQuery, useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
 import Select from 'react-select'
 import Header from './new/header-breadcrumbs'
-import CuratorSelect from './components/CuratorSelect'
 import FormGroup from '../../components/common/forms/FormGroup'
 import { useForm } from 'react-hook-form'
 import {
@@ -12,7 +11,8 @@ import {
   Route,
   Link,
   useRouteMatch,
-  useParams
+  useParams,
+  Redirect
 } from "react-router-dom";
 import WrapperBox from '../../components/wrapper'
 import IBox from '../../components/ibox'
@@ -20,60 +20,35 @@ import IBox from '../../components/ibox'
 import DatePicker from 'react-datepicker'
 import "react-datepicker/dist/react-datepicker.css";
 
-const query_gql = gql`
-{
-  courses{
-    id
-    name
-  }
-  distributors{
-    id
-    name
-  }
-  institutions{
-    id
-    name
-  }
-  customerCompanies{
-    id
-    name
-  }
-  languages{
-    id
-    name
-  }
-  coordinators{
-    id
-    fullName
-  }
-}`
-
-const create_group_gql = gql`
-mutation createGroup($group: CreateGroupInput!){
-  createGroup(input: $group){
+const addClassToGroupGQL = gql`
+mutation addClassToGroup($data: AddClassToGroupInput!){
+  addClassToGroup(input: $data){
     status
   }
 }`
 
 export default function () {
-  const [createGroup, { createGroupData }] = useMutation(create_group_gql);
-  let { id } = useParams();
+  const [addClassToGroup, result] = useMutation(addClassToGroupGQL);
+  let { groupId, groupRelationId } = useParams();
+
+  console.log(result)
 
   const onSubmit = data => {
-    const formData = { ...data, ...formState };
-    createGroup({ variables: { group: { params: formData } } })
+    let formData = { ...data, ...formState, startAt: startDate }
+    formData.hours =  Number(formData.hours)
+    addClassToGroup({ variables: { data: formData } })
     console.log(formData)
   }
 
-  const [customerCompanyId, setCustomerCompanyId] = useState(0);
+  // const [courseId, setCourseId] = useState(0);
 
-  const customerCompanySelected = (optionSelected) => {
-    setCustomerCompanyId(optionSelected.value)
-    handleSelectChange(optionSelected, 'customerCompanyId')
+  const courseSelected = (optionSelected) => {
+    // setCourseId(optionSelected.value)
+    handleSelectChange(optionSelected, 'learningCourseId')
   }
 
   const { control, setValue, register, handleSubmit, watch, errors } = useForm()
-  const [formState, setFormState] = useState({ customerCompanyId: 0 });
+  const [formState, setFormState] = useState({ groupRelationId: groupRelationId });
 
   const handleSelectChange = (selectedOption, name, isMulti = false) => {
     console.log('selectedOption', selectedOption)
@@ -87,101 +62,40 @@ export default function () {
 
   const [startDate, setStartDate] = useState(new Date());
 
-  const { loading, error, data } = useQuery(query_gql);
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error :(</p>;
-  const distributors_options = data.distributors.map(item => ({ value: item.id, label: item.name }))
-  const courses_options = data.courses.map(item => ({ value: item.id, label: item.name }))
+  const typeOpions = [
+    { value: 'fulltime', label: 'Очное' },
+    { value: 'webinar', label: 'Webinar'},
+
+  ]
+
+  if(result.data?.addClassToGroup?.status === 'ok')
+    return <Redirect to={`/groups/${groupId}`} />
+
   return (
     <div id="page-wrapper" className="gray-bg">
       <Header />
       <WrapperBox size="6" rowClass="justify-content-md-center">
-        <IBox title="Учебный курс">
+        <IBox title="Занятие">
 
           <form onSubmit={handleSubmit(onSubmit)}>
-            <FormGroup label="Учебный курс">
-              <Select onChange={e => handleSelectChange(e, 'courseId')} options={courses_options} />
-            </FormGroup>
-            <FormGroup label="Дата начала обучения">
-              <DatePicker selected={startDate} onChange={date => setStartDate(date)} />
-            </FormGroup>
-            <FormGroup label="Продолжительность (месяцы)">
-              <input name="duration" type="text" className="form-control" ref={register} />
-            </FormGroup>
-
-            <div className="form-group row justify-content-end">
-              <div className="col-sm-2">
-                <input className="btn btn-primary btn-sm" type="submit" value="Создать" />
-              </div>
-            </div>
-
-          </form>
-        </IBox>
-        <IBox title="Занятия">
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <FormGroup label="Тип занятий">
-              <Select onChange={e => handleSelectChange(e, 'courseId')} options={distributors_options} />
+            <FormGroup label="Тип занятия">
+              <Select onChange={e => handleSelectChange(e, 'type')} options={typeOpions} />
             </FormGroup>
             <FormGroup label="Количество ак. часов по лицензии">
-              <input name="courseId" type="text" className="form-control" ref={register} />
+              <input name="hours" type="text" className="form-control" ref={register} />
             </FormGroup>
             <FormGroup label="Дата начала занятий">
-              <input name="courseId" type="text" className="form-control" ref={register} />
+              <DatePicker selected={startDate} onChange={date => setStartDate(date)} />
             </FormGroup>
-
-            {/* <div className="hr-line-dashed" /> */}
-            <h4>Расписание:</h4>
-            <div className="hr-line-dashed" />
-            <FormGroup label="Дни недели">
-              <input name="courseId" type="text" className="form-control" ref={register} />
-            </FormGroup>
-
-            <FormGroup label="Время начала занятий">
-              <input name="courseId" type="text" className="form-control" ref={register} />
-            </FormGroup>
-
-            <FormGroup label="Длительность занятий, ак. часы">
-              <input name="courseId" type="text" className="form-control" ref={register} />
-            </FormGroup>
-
-            <FormGroup label="Преподаватель">
-              <input name="courseId" type="text" className="form-control" ref={register} />
-            </FormGroup>
-
-            <FormGroup label="Ссылка на комнату для вебинаров">
-              <input name="courseId" type="text" className="form-control" ref={register} />
-            </FormGroup>
-
-            <FormGroup label="Хост">
-              <input name="courseId" type="text" className="form-control" ref={register} />
-            </FormGroup>
-
             <div className="form-group row justify-content-end">
               <div className="col-sm-2">
-                <input className="btn btn-primary btn-sm" type="submit" value="Создать" />
+                <input className="btn btn-primary btn-sm" type="submit" value="Добавить" />
               </div>
             </div>
 
           </form>
         </IBox>
 
-        <IBox title="Прохождения контента">
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <FormGroup label="Юнит старта">
-              <Select onChange={e => handleSelectChange(e, 'courseId')} options={distributors_options} />
-            </FormGroup>
-            <FormGroup label="Число занятий на один юнит">
-              <input name="courseId" type="text" className="form-control" ref={register} />
-            </FormGroup>
-
-            <div className="form-group row justify-content-end">
-              <div className="col-sm-2">
-                <input className="btn btn-primary btn-sm" type="submit" value="Создать" />
-              </div>
-            </div>
-
-          </form>
-        </IBox>
       </WrapperBox>
 
     </div>
