@@ -72,9 +72,6 @@ export default function () {
     console.log(state)
   }
 
-
-
-
   const [startDate, setStartDate] = useState(new Date());
 
   const { loading, error, data } = useQuery(query_gql);

@@ -14,6 +14,7 @@ import Header from './header'
 import WrapperBox from '../../../../components/wrapper'
 import IBox from '../../../../components/ibox'
 import GroupInfo from './GroupInfo'
+import CgsrInfo from './CgsrInfo'
 
 const index_gql = gql`
 query Group($id: ID!){
@@ -21,6 +22,20 @@ query Group($id: ID!){
     id
     name
     humanStatus
+    courseGroupScenarioRelations{
+      id
+      learningCourse {
+        id
+        name
+      }
+      startDate
+      duration
+      classesPerUnit
+      startUnit {
+        id
+        name
+      }
+    }
     customerCompany{
       id
       name
@@ -36,10 +51,18 @@ export default function () {
   // let match = useRouteMatch();
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
-  let match = useRouteMatch();
+  // let match = useRouteMatch();
+
 
   const group = data.groups[0]
   console.log(group)
+
+  const courses = group.courseGroupScenarioRelations.map( cgsr =>
+    <IBox key={cgsr.id} title={cgsr.learningCourse.name}>
+      <CgsrInfo cgsr={cgsr} />
+    </IBox>
+  )
+
   return (
 
     <div id="page-wrapper" className="gray-bg">
@@ -52,6 +75,7 @@ export default function () {
         <IBox title={<span>Занятия <Link to={`/groups/${group.id}/add-course`} className="btn btn-primary">+</Link></span>}>
           <GroupInfo group={group} />
         </IBox>
+        {courses}
         <IBox title={<span>Студенты <Link to={`/groups/${group.id}/add-students`} className="btn btn-primary">+</Link></span>}>
           <GroupInfo group={group} />
         </IBox>

@@ -64,6 +64,7 @@ module.exports = function(proxy, allowedHost) {
     // to CSS are currently hot reloaded. JS changes will refresh the browser.
     hot: false,
     inline: false,
+    liveReload: false,
     // Use 'ws' instead of 'sockjs-node' on server since we're using native
     // websockets in `webpackHotDevClient`.
     transportMode: 'ws',
